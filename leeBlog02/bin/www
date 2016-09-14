@@ -1,0 +1,98 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+//引入app 通过调用express生成的 app类型是函数
+var app = require('../app');
+var debug = require('debug')('leeBlog:server');
+var http = require('http');
+
+/**
+ * Get port from environment and store in Express.
+ 从环境变量中获取端口号并保存到app中
+ */
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ 把一个端口处理成一个数字或字符串或者false
+ */
+
+function normalizePort(val) {
+  //先试图转成10进制数字
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+  //不是命名管道，也不是正常端口就返回false
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  console.log("111111111");
+  //如果系统调用不是监听则抛出错误
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {  //错误编码
+    //没有权限 子啊Linux用户不能使用1000以下的端口 必须root用户才能用
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1); //1表示错误退出 0表示正确退出
+      break;
+    case 'EADDRINUSE':
+      //  端口已经被占用
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  //先获取到绑定的地址
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}

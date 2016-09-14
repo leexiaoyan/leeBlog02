@@ -1,0 +1,20 @@
+{
+  "name": "leeBlog",
+  "description": "",
+  "main": "",
+  "authors": [
+    "leexiaoyan <1123008051@qq.com>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7"
+  }
+}
